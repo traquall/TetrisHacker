@@ -1,6 +1,6 @@
 
 public class Brick {
-	private final char brickChar = 'o';
+	private final String brickChar = "o";
 	private int brickPosX;
 	private int brickPosY;
 	
@@ -22,7 +22,7 @@ public class Brick {
 		this.brickPosY = brickPosY;
 	}
 	
-	public char getChar() {
+	public String getChar() {
 		return this.brickChar;
 	}
 }

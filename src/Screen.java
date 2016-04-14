@@ -1,5 +1,9 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Screen {
 	private static Tetrimino tetrimino;
@@ -15,28 +19,41 @@ public class Screen {
 			clearConsole();
 			refresh();
 			System.out.println(lines);
-			sleep();
+			try {
+			    Thread.sleep(100);
+			    timeCount++;
+			} catch(InterruptedException e) {
+				e.printStackTrace();
+			    Thread.currentThread().interrupt();
+			}
 		}
 	}
 	
 	public static void refresh() {
-		int brickCount = 0;
+		Map <Integer, String> yBricks = new HashMap<Integer, String>();
+		Map <Integer, String> xBricks = new HashMap<Integer, String>();
+		
+		for(Brick brick : tetrimino.getBricks()) {
+			yBricks.put(brick.getPosY(), brick.getChar());
+			xBricks.put(brick.getPosX(), brick.getChar());
+		}
+		
 		lines += "\t+==========+\n";
 		for(int i = 0 ; i < 20 ; i++) {
-			for(Brick brick : tetrimino.getBricks()) {
-				if(brick.getPosY() == i) {
-					for(int j = 0 ; j < 10 ; j++) {
-						if(brick.getPosX() == j) {
-							lines += brick.getChar();
-						}
-						else {
-							lines += " ";
-						}
+			if(yBricks.get(i) == null) {
+				lines += "\t|          |\n";
+			}
+			else {
+				lines += "\t|";
+				for(int j = 0 ; j < 10 ; j++) {
+					if(xBricks.get(j) == null) {
+						lines += " ";
+					}
+					else {
+						lines += xBricks.get(j);
 					}
 				}
-				else {
-					lines += "\t|          |\n";
-				}
+				lines += "|\n";
 			}
 		}
 		lines += "\t+==========+";
@@ -47,15 +64,5 @@ public class Screen {
 		char[] newLines = new char[25];
 		Arrays.fill(newLines, '\n');
 		System.out.print(String.valueOf(newLines));
-	}
-	
-	private static void sleep() {
-		try {
-		    Thread.sleep(100);
-		    timeCount++;
-		} catch(InterruptedException e) {
-			e.printStackTrace();
-		    Thread.currentThread().interrupt();
-		}
 	}
 }
